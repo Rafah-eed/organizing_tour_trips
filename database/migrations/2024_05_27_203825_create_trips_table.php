@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('trips', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->unique();
+            $table->string('description');
+            $table->string('photo');
+            $table->boolean('is_open')->nullable()->default(false);
+            $table->int('capacity');
             $table->timestamps();
         });
     }
