@@ -20,18 +20,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::apiResource('trip', 'TripController');
-// Route::apiResource('customer', 'customerController');
-// Route::apiResource('bookHotel', 'bookHotelController');
-// Route::apiResource('bookRestaurant', 'bookRestaurantController');
-// Route::apiResource('guide', 'guideController');
-// Route::apiResource('guideTrip', 'guideTripController');
-// Route::apiResource('Hotel', 'HotelController');
-// Route::apiResource('Rating', 'RatingController');
-// Route::apiResource('restaurant', 'restaurantController');
-// Route::apiResource('station', 'stationController');
-// Route::apiResource('stationTrip', 'stationTripController');
+Route::apiResource('customer', 'customerController');
+Route::apiResource('bookHotel', 'bookHotelController');
+Route::apiResource('bookRestaurant', 'bookRestaurantController');
+Route::apiResource('guide', 'guideController');
+Route::apiResource('guideTrip', 'guideTripController');
+Route::apiResource('Hotel', 'HotelController');
+Route::apiResource('Rating', 'RatingController');
+Route::apiResource('restaurant', 'restaurantController');
+Route::apiResource('station', 'stationController');
+Route::apiResource('stationTrip', 'stationTripController');
 
-// Route::apiResource('user', 'userController');
-// Route::apiResource('userTrip', 'userTripController');
-// Route::apiResource('workGuide', 'workGuideController');
+Route::apiResource('user', 'userController');
+Route::apiResource('userTrip', 'userTripController');
+Route::apiResource('workGuide', 'workGuideController');
 

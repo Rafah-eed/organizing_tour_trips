@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('user_trips', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('id_user');
+            $table->bigInteger('id_trip');
+            $table->integer('totalDays');
+            $table->integer('totalTourists');
             $table->timestamps();
         });
     }
