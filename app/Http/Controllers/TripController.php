@@ -8,12 +8,21 @@ use App\Http\Requests\UpdateTripRequest;
 
 class TripController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+         $trips = trips::all();
+        return response()->json([
+            'status' => 'success',
+            'trips' => $trips,
+        ]);
     }
 
     /**
@@ -29,7 +38,28 @@ class TripController extends Controller
      */
     public function store(StoreTripRequest $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'photo' => 'required|string|max:255',
+            'is_open' => 'boolean', 
+            'capacity' => 'required|int|max:1000', 
+        ]);
+        
+
+        $todo = Todo::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'photo' => $request->photo,
+            'is_open' => $request->is_open,
+            'capacity' => $request->capacity,
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'trip created successfully',
+            'trips' => $trips,
+        ]);
     }
 
     /**
@@ -37,7 +67,11 @@ class TripController extends Controller
      */
     public function show(Trip $trip)
     {
-        //
+        $trips = trips::find($id);
+        return response()->json([
+            'status' => 'success',
+            'trips' => $trips,
+        ]);
     }
 
     /**
@@ -53,7 +87,29 @@ class TripController extends Controller
      */
     public function update(UpdateTripRequest $request, Trip $trip)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'photo' => 'required|string|max:255',
+            'is_open' => 'boolean', 
+            'capacity' => 'required|int|max:1000', 
+        ]);
+
+        $trips = trips::find($id);
+
+
+        $trips->title = $trips->title;
+        $trips->description = $trips->description;
+        $trips->photo = $trips->photo;
+        $trips->is_open = $trips->is_open;
+        $trips->capacity = $trips->capacity;
+        $todo->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'trip updated successfully',
+            'trip' => $trips,
+        ]);
     }
 
     /**
@@ -61,6 +117,13 @@ class TripController extends Controller
      */
     public function destroy(Trip $trip)
     {
-        //
+        $trips = trips::find($id);
+        $trips->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'trip deleted successfully',
+            'trip' => $tripss,
+        ]);
     }
 }
