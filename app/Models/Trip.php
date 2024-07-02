@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Trip extends Model
 {
@@ -13,7 +14,22 @@ class Trip extends Model
         'name', 
         'description',
         'photo',
-        'is_open',
         'capacity'
     ];
+
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function isOpened(): HasMany
+    {
+        return $this->hasMany(IsOpened::class);
+    }
+
+    public function stationTrips(): HasMany
+    {
+        return $this->hasMany(stationTrip::class);
+    }
 }

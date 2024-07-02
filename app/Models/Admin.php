@@ -4,14 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Guide extends Model
+class Admin extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'name', 
         'fatherName',
         'lastName',
         'phone',
@@ -20,13 +19,7 @@ class Guide extends Model
         'password',
         'bankName',
         'accountNumber',
-        'goneTrips',
-        'totalTripsNumber',
-        'salary'
+        'tripsNumber'
     ];
 
-    public function isOpened(): HasMany
-    {
-        return $this->hasMany(IsOpened::class);
-    }
 }

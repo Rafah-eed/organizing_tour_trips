@@ -16,16 +16,14 @@ return new class extends Migration
             $table->string('name');
             $table->string('fatherName');
             $table->string('lastName');
-            $$table->string('phone', 10);
+            $table->string('phone', 10);
             $table->string('address');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('bankName');
             $table->string('accountNumber');
-            $table->string('tripsNumber');
-            $table->boolean('admin')->default(false);
-            $table->boolean('user')->default(false);
+            $table->string('tripsNumber');//the number of trips the user has gone
             $table->rememberToken();
             $table->timestamps();
         });

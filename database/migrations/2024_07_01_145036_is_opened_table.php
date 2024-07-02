@@ -11,12 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_trips', function (Blueprint $table) {
+        Schema::create('is_opened', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('id_user');
-            $table->bigInteger('id_trip');
-            $table->integer('totalDays');
-            $table->integer('totalTourists');
+            $table->string('name');
+            $table->bigInteger('trip_id');
+            $table->bigInteger('guide_id');
+            $table->boolean('is_opened')->nullable()->default(false);
+            $table->integer('capacity');
+            $table->Date('date');
+            $table->rememberToken();
             $table->timestamps();
         });
     }
@@ -26,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_trips');
+        //
     }
 };

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('station_trips', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('id_station');
-            $table->bigInteger('id_trip');
+            $table->bigInteger('station_id');
+            $table->bigInteger('trip_id');
             $table->integer('daysNum');
             $table->timestamps();
         });

@@ -2,7 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\TripController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,9 +16,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 
 // Route::apiResource('trip', 'TripController');
@@ -47,10 +49,10 @@ Route::controller(AuthController::class)->group(function () {
 
 Route::controller(TripController::class)->group(function () {
     Route::get('trips', 'index');
-    Route::post('trips', 'store');
-    Route::get('trips/{id}', 'show');
-    Route::put('trips/{id}', 'update');
-    Route::delete('trips/{id}', 'destroy');
+    Route::post('trip', 'store');
+    Route::get('trip/{id}', 'show');
+    Route::put('trip/{id}', 'update');
+    Route::delete('trip/{id}', 'destroy');
 }); 
 
 

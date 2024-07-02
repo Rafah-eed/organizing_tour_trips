@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -27,9 +29,7 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'bankName',
         'accountNumber',
-        'tripsNumber',
-        'admin',
-        'user'
+        'tripsNumber'
     ];
 
     /**
@@ -61,14 +61,35 @@ class User extends Authenticatable implements JWTSubject
         return $this->getKey();
     }
 
+
     /**
      * Return a key value array, containing any custom claims to be added to the JWT.
      *
      * @return array
      */
-    public function getJWTCustomClaims()
+    public function getJWTCustomClaims(): array
     {
         return [];
     }
 
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function bookHotels(): HasMany
+    {
+        return $this->hasMany(bookHotel::class);
+    }
+
+    public function bookRestaurants(): HasMany
+    {
+        return $this->hasMany(bookRestaurant::class);
+    }
+
+    
+    public function reservations(): HasMany
+    {
+        return $this->hasMany(Reservation::class);
+    }
 }

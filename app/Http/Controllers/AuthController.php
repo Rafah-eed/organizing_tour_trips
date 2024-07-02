@@ -1,8 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+
+use App\Models\Category;
+use App\GeneralTraits;
+use Illuminate\Support\Facades\Hash;
+
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -31,7 +39,7 @@ class AuthController extends Controller
         return response()->json([
                 'status' => 'success',
                 'user' => $user,
-                'authorisation' => [
+                'authorization' => [
                     'token' => $token,
                     'type' => 'bearer',
                 ]
@@ -42,14 +50,30 @@ class AuthController extends Controller
     public function register(Request $request){
         $request->validate([
             'name' => 'required|string|max:255',
+            'fatherName' => 'required|string|max:255',
+            'lastName' => 'required|string|max:255',
+            'phone' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
+            'bankName' => 'required|string|max:255',
+            'accountNumber' => 'required|string|max:255',
+            'tripsNumber' => 'required|string|max:255',
+          
         ]);
 
         $user = User::create([
             'name' => $request->name,
+            'fatherName' => $request->fatherName,
+            'lastName' => $request->lastName,
+            'phone' => $request->phone,
+            'address' => $request->address,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'bankName' => $request->bankName,
+            'accountNumber' => $request->accountNumber,
+            'tripsNumber' => $request->tripsNumber
+            
         ]);
 
         $token = Auth::login($user);
@@ -57,7 +81,7 @@ class AuthController extends Controller
             'status' => 'success',
             'message' => 'User created successfully',
             'user' => $user,
-            'authorisation' => [
+            'authorization' => [
                 'token' => $token,
                 'type' => 'bearer',
             ]
@@ -78,7 +102,7 @@ class AuthController extends Controller
         return response()->json([
             'status' => 'success',
             'user' => Auth::user(),
-            'authorisation' => [
+            'authorization' => [
                 'token' => Auth::refresh(),
                 'type' => 'bearer',
             ]

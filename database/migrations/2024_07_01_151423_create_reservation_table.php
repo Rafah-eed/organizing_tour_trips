@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('guide_trips', function (Blueprint $table) {
+        Schema::create('reservation', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('isOpened_id');
+            $table->bigInteger('user_id');
+            $table->boolean('reserve_statue')->nullable()->default(true);
             $table->timestamps();
         });
     }
@@ -22,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('guide_trips');
+        Schema::dropIfExists('reservation');
     }
 };

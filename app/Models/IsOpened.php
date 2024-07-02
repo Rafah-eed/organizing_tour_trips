@@ -7,21 +7,31 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class stationTrip extends Model
+class IsOpened extends Model
 {
     use HasFactory;
+
     protected $fillable = [
-        'station_id', 
+        'name', 
         'trip_id',
-        'daysNum'
+        'guide_id',
+        'is_opened',
+        'capacity',
+        'date'
     ];
 
-    public function station(): BelongsTo
+    public function reservations(): HasMany
     {
-        return $this->belongsTo(Station::class);
+        return $this->hasMany(Reservation::class);
     }
+
+
     public function trip(): BelongsTo
     {
         return $this->belongsTo(Trip::class);
+    }
+    public function guide(): BelongsTo
+    {
+        return $this->belongsTo(Guide::class);
     }
 }

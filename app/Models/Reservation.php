@@ -6,21 +6,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class bookRestaurant extends Model
+class Reservation extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'restaurant_id', 
+        'isOpened_id', 
         'user_id',
-        'date',
-        'daysNum',
-        'price'
+        'reserve_statue'
     ];
 
-    public function restaurant(): BelongsTo
+    public function isOpened(): BelongsTo
     {
-        return $this->belongsTo(Restaurant::class);
+        return $this->belongsTo(IsOpened::class);
     }
     public function user(): BelongsTo
     {

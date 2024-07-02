@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('book_restaurants', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('id_restaurants');
-            $table->bigInteger('id_user');
+            $table->bigInteger('restaurants_id');
+            $table->bigInteger('user_id');
             $table->date('date'); // Corrected method name to lowercase
             $table->integer('daysNum'); // Corrected method name to integer
             $table->float('price');

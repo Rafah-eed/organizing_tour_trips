@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('description');
             $table->string('photo');
-            $table->boolean('is_open')->nullable()->default(false);
-            $table->int('capacity');
+            // $table->boolean('is_open')->nullable()->default(false);
+            $table->integer('capacity');
             $table->timestamps();
         });
     }
