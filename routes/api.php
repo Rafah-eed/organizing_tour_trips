@@ -21,7 +21,7 @@ use App\Http\Controllers\TripController;
 // });
 
 
-// Route::apiResource('trip', 'TripController');
+Route::apiResource('trip', 'TripController');
 // Route::apiResource('customer', 'customerController');
 // Route::apiResource('bookHotel', 'bookHotelController');
 // Route::apiResource('bookRestaurant', 'bookRestaurantController');
@@ -46,14 +46,6 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('refresh', 'refresh');
 
 });
-
-Route::controller(TripController::class)->group(function () {
-    Route::get('trips', 'index');
-    Route::post('trip', 'store');
-    Route::get('trip/{id}', 'show');
-    Route::put('trip/{id}', 'update');
-    Route::delete('trip/{id}', 'destroy');
-}); 
 
 
 

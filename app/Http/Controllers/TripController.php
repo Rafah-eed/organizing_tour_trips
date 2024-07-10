@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use App\Models\Trip;
-use App\Http\Requests\StoreTripRequest;
+//use App\Http\Requests\StoreTripRequest;
 use App\Http\Requests\UpdateTripRequest;
+use Illuminate\Http\Response;
 
 class TripController extends Controller
 {
@@ -15,51 +17,73 @@ class TripController extends Controller
 
     /**
      * Display a listing of the resource.
+     *
+     * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
-         $trips = trips::all();
-        return response()->json([
-            'status' => 'success',
-            'trips' => $trips,
-        ]);
+        $trip = Trip::all();
+        if (is_null($trip))
+            return self::getResponse(false, "No data available", null, 204);
+
+            return self::getResponse(true, "trips has been retrieved", $trip, 200);
     }
 
- 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return Response
+     */
+    public function create(): Response
+    {
+        return (Response());
+    }
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function store(StoreTripRequest $request)
+    public function store(Request $request): JsonResponse
     {
+
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'photo' => 'required|string|max:255',
-            'capacity' => 'required|int|max:1000'
+            'photo' => 'required|image',
+            'capacity' => 'required|int|max:255'
         ]);
-        
+
+        $photo = $request->photo;
+        $newPhoto =time().$photo->getClientOriginalName();
+        $photo->move('photos/images',$newPhoto);
+
 
         $trips = Trip::create([
             'name' => $request->name,
             'description' => $request->description,
-            'photo' => $request->photo,
+            'photo' => 'photos/images'.$newPhoto,
             'capacity' => $request->capacity
         ]);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'trip created successfully',
-            'trips' => $trips,
-        ]);
+        if (is_null($trips)) {
+            return self::getResponse(true, "error in create ", null, 204);
+        }
+        return self::getResponse(true, "product has been created", $trips, 200);
+
     }
+
+
+
+
 
     /**
      * Display the specified resource.
      */
     public function show(Trip $trip)
     {
-        $trip = Trip::find($id);
+       // $trip = Trip::find($id);
         return response()->json([
             'status' => 'success',
             'trip' => $trip,
@@ -78,7 +102,7 @@ class TripController extends Controller
             'capacity' => 'required|int|max:255'
         ]);
 
-        $trips = Trip::find($id);
+      //  $trips = Trip::find($id);
 
 
         $trips->title = $request->title;
@@ -99,7 +123,7 @@ class TripController extends Controller
      */
     public function destroy(Trip $trip)
     {
-        $trip = Trip::find($id);
+    //    $trip = Trip::find($id);
         $trip->delete();
 
         return response()->json([

@@ -14,10 +14,9 @@ return new class extends Migration
         Schema::create('is_opened', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->bigInteger('trip_id');
-            $table->bigInteger('guide_id');
-            $table->boolean('is_opened')->nullable()->default(false);
-            $table->integer('capacity');
+            $table->Integer('trip_id');
+            $table->Integer('guide_id');
+            $table->boolean('opened')->nullable()->default(false);
             $table->Date('date');
             $table->rememberToken();
             $table->timestamps();
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('is_opened');
     }
 };
