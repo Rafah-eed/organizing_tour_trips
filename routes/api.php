@@ -21,7 +21,7 @@ use App\Http\Controllers\TripController;
 // });
 
 
-Route::apiResource('trip', 'TripController');
+Route::apiResource('trip', TripController::class);
 // Route::apiResource('customer', 'customerController');
 // Route::apiResource('bookHotel', 'bookHotelController');
 // Route::apiResource('bookRestaurant', 'bookRestaurantController');

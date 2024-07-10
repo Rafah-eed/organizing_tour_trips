@@ -64,7 +64,7 @@ class TripController extends Controller
         $trips = Trip::create([
             'name' => $request->name,
             'description' => $request->description,
-            'photo' => 'photos/images'.$path,
+            'photo' => 'storage/'.$path,
             'capacity' => $request->capacity
         ]);
 
