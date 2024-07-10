@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('book_hotels', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('hotels_id');
-            $table->bigInteger('user_id');
+            $table->foreignId('hotels_id')->constrained();
+            $table->foreignId('user_id')->constrained();
             $table->date('date'); // Corrected method name to lowercase
             $table->integer('daysNum'); // Corrected method name to integer
             $table->float('price');
             $table->timestamps();
         });
-        
+
     }
 
     /**

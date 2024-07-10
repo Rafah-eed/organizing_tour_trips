@@ -12,7 +12,7 @@ class IsOpened extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 
+        'name',
         'trip_id',
         'guide_id',
         'is_opened',
@@ -32,6 +32,6 @@ class IsOpened extends Model
     }
     public function guide(): BelongsTo
     {
-        return $this->belongsTo(Guide::class);
+        return $this->belongsTo(GuidesDetails::class);
     }
 }

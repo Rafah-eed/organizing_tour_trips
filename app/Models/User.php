@@ -29,7 +29,7 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'bankName',
         'accountNumber',
-        'tripsNumber'
+        'role'
     ];
 
     /**
@@ -87,9 +87,14 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(bookRestaurant::class);
     }
 
-    
+
     public function reservations(): HasMany
     {
         return $this->hasMany(Reservation::class);
+    }
+
+    public function GuidesDetailes()
+    {
+        return $this->hasOne(GuidesDetailes::class);
     }
 }

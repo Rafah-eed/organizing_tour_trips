@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Models\Guide;
+use App\Models\GuidesDetails;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
@@ -19,7 +19,7 @@ class GuidePolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Guide $guide): bool
+    public function view(User $user, GuidesDetails $guide): bool
     {
         //
     }
@@ -35,7 +35,7 @@ class GuidePolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Guide $guide): bool
+    public function update(User $user, GuidesDetails $guide): bool
     {
         //
     }
@@ -43,7 +43,7 @@ class GuidePolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Guide $guide): bool
+    public function delete(User $user, GuidesDetails $guide): bool
     {
         //
     }
@@ -51,7 +51,7 @@ class GuidePolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Guide $guide): bool
+    public function restore(User $user, GuidesDetails $guide): bool
     {
         //
     }
@@ -59,7 +59,7 @@ class GuidePolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Guide $guide): bool
+    public function forceDelete(User $user, GuidesDetails $guide): bool
     {
         //
     }

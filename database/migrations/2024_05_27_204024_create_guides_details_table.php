@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('book_restaurants', function (Blueprint $table) {
+        Schema::create('guides_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('restaurants_id')->constrained();
             $table->foreignId('user_id')->constrained();
-            $table->date('date'); // Corrected method name to lowercase
-            $table->integer('daysNum'); // Corrected method name to integer
-            $table->float('price');
+            $table->integer('TotalTrips');  //The number of trips the guide Should go in a month
+            $table->float('salary');
+            $table->rememberToken();
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('book_restaurants');
+        Schema::dropIfExists('guides_details');
     }
 };

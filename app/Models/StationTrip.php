@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class stationTrip extends Model
+class StationTrip extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'station_id', 
+        'station_id',
         'trip_id',
         'daysNum'
     ];

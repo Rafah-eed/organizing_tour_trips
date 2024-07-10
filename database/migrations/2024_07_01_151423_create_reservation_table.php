@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('reservation', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('isOpened_id');
-            $table->bigInteger('user_id');
+            $table->foreignId('isOpened_id')->constrained();
+            $table->foreignId('user_id')->constrained();
             $table->boolean('reserve_statue')->nullable()->default(true);
             $table->timestamps();
         });

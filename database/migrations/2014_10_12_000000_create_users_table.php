@@ -6,6 +6,11 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+
+    /*
+     * TODO :
+     * MAKE A FUNCTION TO COUNT THE NUMBER OF TRIPS THE USER HAS GONE IN THE USER CONTROLLER
+     */
     /**
      * Run the migrations.
      */
@@ -23,7 +28,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('bankName');
             $table->string('accountNumber');
-            $table->string('tripsNumber');//the number of trips the user has gone
+            $table->enum('role', ['admin', 'guide', 'user']); // 1 for admin and 2 for guide and 3 for user
             $table->rememberToken();
             $table->timestamps();
         });

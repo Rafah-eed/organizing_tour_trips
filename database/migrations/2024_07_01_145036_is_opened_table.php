@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('is_opened', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->Integer('trip_id');
-            $table->Integer('guide_id');
+            $table->foreignId('trip_id')->constrained();
+            $table->foreignId('guide_id')->constrained();
             $table->boolean('opened')->nullable()->default(false);
             $table->Date('date');
             $table->rememberToken();
