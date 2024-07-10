@@ -55,15 +55,16 @@ class TripController extends Controller
             'capacity' => 'required|int|max:255'
         ]);
 
-        $photo = $request->photo;
-        $newPhoto =time().$photo->getClientOriginalName();
-        $photo->move('photos/images',$newPhoto);
+//        $photo = $request->photo;
+        $name =time().$request->photo->getClientOriginalName();
+//        $photo->move('photos/images',$newPhoto);
 
+        $path = $request->file('photo')->storeAs('photos/images',$name,'public');
 
         $trips = Trip::create([
             'name' => $request->name,
             'description' => $request->description,
-            'photo' => 'photos/images'.$newPhoto,
+            'photo' => 'photos/images'.$path,
             'capacity' => $request->capacity
         ]);
 
