@@ -7,6 +7,7 @@ use App\Models\Trip;
 //use App\Http\Requests\StoreTripRequest;
 use App\Http\Requests\UpdateTripRequest;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 
 class TripController extends Controller
 {
@@ -77,60 +78,45 @@ class TripController extends Controller
 
 
 
-
-
     /**
-     * Display the specified resource.
-     */
-    public function show(Trip $trip)
-    {
-       // $trip = Trip::find($id);
-        return response()->json([
-            'status' => 'success',
-            'trip' => $trip,
-        ]);
-    }
-
-    /**
+     *
      * Update the specified resource in storage.
+     * @param Request $request
+     * @param Trip $trip
+     * @return JsonResponse
      */
-    public function update(UpdateTripRequest $request, Trip $trips)
+    public function update(Request $request, Trip $trip): JsonResponse
     {
-        $request->validate([
+
+        $fields = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'photo' => 'required|string|max:255',
+            'photo' => 'required|image',
             'capacity' => 'required|int|max:255'
         ]);
 
-      //  $trips = Trip::find($id);
+        if ($request->has('photo')) {
+            $name = time() . $request->photo->getClientOriginalName();
+            $path = $request->file('photo')->storeAs('photos/images', $name, 'public');
+            $fields['photo'] = 'storage/'.$path; // Update the 'photo' field with the stored path
+        }
 
+        try {
+            $trip->update($fields);
+        } catch (\Exception $e) {
+            Log::error('Error updating trip: ' . $e->getMessage());
+            // Handle the error (e.g., return an error response)
+        }
 
-        $trips->title = $request->title;
-        $trips->description = $request->description;
-        $trips->photo = $request->photo;
-        $trips->capacity = $request->capacity;
-        $trips->save();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'trip updated successfully',
-            'trip' => $trips,
-        ]);
+        return self::getResponse(true, "Trip has been updated", $trip, 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Trip $trip)
+    public function destroy(Trip $trip): JsonResponse
     {
-    //    $trip = Trip::find($id);
         $trip->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'trip deleted successfully',
-            'trip' => $trip,
-        ]);
+        return self::getResponse(true, "Trip has been deleted", null, 200);
     }
 }
