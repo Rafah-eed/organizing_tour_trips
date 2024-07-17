@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Trip;
-//use App\Http\Requests\StoreTripRequest;
-use App\Http\Requests\UpdateTripRequest;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 

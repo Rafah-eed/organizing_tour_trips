@@ -2,11 +2,12 @@
 
 namespace App\Policies;
 
+
+use App\Models\bookStation;
 use App\Models\User;
-use App\Models\workGuide;
 use Illuminate\Auth\Access\Response;
 
-class WorkGuidePolicy
+class BookStationPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -19,7 +20,7 @@ class WorkGuidePolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, workGuide $workGuide): bool
+    public function view(User $user, bookStation $bookStation): bool
     {
         //
     }
@@ -35,7 +36,7 @@ class WorkGuidePolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, workGuide $workGuide): bool
+    public function update(User $user, bookStation $bookStation): bool
     {
         //
     }
@@ -43,7 +44,7 @@ class WorkGuidePolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, workGuide $workGuide): bool
+    public function delete(User $user, bookStation $bookStation): bool
     {
         //
     }
@@ -51,7 +52,7 @@ class WorkGuidePolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, workGuide $workGuide): bool
+    public function restore(User $user, bookStation $bookStation): bool
     {
         //
     }
@@ -59,7 +60,7 @@ class WorkGuidePolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, workGuide $workGuide): bool
+    public function forceDelete(User $user, bookStation $bookStation): bool
     {
         //
     }

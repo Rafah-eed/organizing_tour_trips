@@ -77,24 +77,18 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Comment::class);
     }
 
-    public function bookHotels(): HasMany
+    public function bookStations(): HasMany
     {
-        return $this->hasMany(bookHotel::class);
+        return $this->hasMany(bookStation::class);
     }
-
-    public function bookRestaurants(): HasMany
-    {
-        return $this->hasMany(bookRestaurant::class);
-    }
-
 
     public function reservations(): HasMany
     {
         return $this->hasMany(Reservation::class);
     }
 
-    public function GuidesDetailes()
+    public function GuidesDetails()
     {
-        return $this->hasOne(GuidesDetailes::class);
+        return $this->hasOne(GuidesDetails::class);
     }
 }

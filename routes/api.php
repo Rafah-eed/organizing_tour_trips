@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\StationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -22,15 +23,14 @@ use App\Http\Controllers\TripController;
 
 
 Route::apiResource('trip', TripController::class);
-// Route::apiResource('customer', 'customerController');
-// Route::apiResource('bookHotel', 'bookHotelController');
+Route::apiResource('station', StationController::class);
+// Route::apiResource('bookStation', 'bookHotelController');
 // Route::apiResource('bookRestaurant', 'bookRestaurantController');
 // Route::apiResource('guide', 'guideController');
 // Route::apiResource('guideTrip', 'guideTripController');
 // Route::apiResource('Hotel', 'HotelController');
 // Route::apiResource('Rating', 'RatingController');
 // Route::apiResource('restaurant', 'restaurantController');
-// Route::apiResource('station', 'stationController');
 // Route::apiResource('stationTrip', 'stationTripController');
 
 // Route::apiResource('user', 'userController');

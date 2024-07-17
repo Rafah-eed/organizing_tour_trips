@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('description');
             $table->string('photo');
             $table->string('address');
+            $table->string('contactInfo');
+            $table->enum('type', ['restaurant', 'hotel', 'other']);
             $table->timestamps();
         });
     }

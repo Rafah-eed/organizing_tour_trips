@@ -10,20 +10,18 @@ class Station extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name', 
+        'name',
         'description',
         'photo',
-        'capacity'
+        'address',
+        'contactInfo',
+        'type'
     ];
 
-    public function hotels(): HasMany
-    {
-        return $this->hasMany(Hotel::class);
-    }
 
     public function restaurants(): HasMany
     {
-        return $this->hasMany(Restaurant::class);
+        return $this->hasMany(Station::class);
     }
 
     public function stationTrips(): HasMany
