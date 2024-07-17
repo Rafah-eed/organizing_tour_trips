@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -42,21 +41,13 @@ class User extends Authenticatable implements JWTSubject
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
 
-     /**
+    /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
      * @return mixed
      */
-    public function getJWTIdentifier()
+    public function getJWTIdentifier(): mixed
     {
         return $this->getKey();
     }
@@ -87,7 +78,7 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Reservation::class);
     }
 
-    public function GuidesDetails()
+    public function GuidesDetails(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(GuidesDetails::class);
     }

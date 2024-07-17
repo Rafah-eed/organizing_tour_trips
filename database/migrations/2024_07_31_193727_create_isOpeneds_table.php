@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reservation', function (Blueprint $table) {
+        Schema::create('actives', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('isOpened_id')->constrained();
-            $table->foreignId('user_id')->constrained();
-            $table->boolean('reserve_statue')->nullable()->default(true);
+            $table->string('name');
+            $table->foreignId('trip_id')->constrained();
+            $table->boolean('isOpened')->nullable()->default(false);
+            $table->Date('date');
+            $table->rememberToken();
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reservations');
+        Schema::dropIfExists('actives');
     }
 };

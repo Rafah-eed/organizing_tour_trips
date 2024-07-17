@@ -24,7 +24,6 @@ return new class extends Migration
             $table->string('phone', 10);
             $table->string('address');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('bankName');
             $table->string('accountNumber');
@@ -40,5 +39,20 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('users');
+    }
+
+    public function getRememberToken()
+    {
+        return $this->remember_token;
+    }
+
+    public function setRememberToken($value)
+    {
+        $this->remember_token = $value;
+    }
+
+    public function getRememberTokenName()
+    {
+        return 'remember_token';
     }
 };

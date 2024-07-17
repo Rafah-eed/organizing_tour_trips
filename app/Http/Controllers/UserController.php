@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
+
 
 class UserController extends Controller
 {
@@ -16,30 +19,31 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): \Illuminate\Http\JsonResponse
     {
         $users = User::all();
-        return response()->json([
-            'status' => 'success',
-            'users' => $users,
-        ]);
-    }
+        if (is_null($users))
+            return self::getResponse(false, "No data available", null, 204);
 
+        return self::getResponse(true, "users has been retrieved", $users, 200);
+
+    }
+    /**
+    */
     /**
      * Show the form for creating a new resource.
+     * @return Response
      */
-    public function create()
+    public function create(): Response
     {
-        //
+        return (Response());
     }
 
     /**
      * Store a newly created resource in storage.
+     *  @param Request $request
+     * @return JsonResponse
      */
-    public function store(StoreUserRequest $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.
@@ -60,16 +64,64 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(Request $request, User $user): JsonResponse
     {
-        //
+        $fields = $request->validate([
+            'name' => 'required|string|max:255',
+            'fatherName' => 'required|string|max:255',
+            'lastName' => 'required|string|max:255',
+            'phone' => 'required|numeric|digits:10',
+            'address' => 'required|string|max:255',
+            'email' => 'required|email',
+            'password' => 'required|min:6',
+            'bankName' => 'required|string|max:255',
+            'accountNumber' => 'required|numeric',
+            'role' => 'in:admin,guide,user'
+        ]);
+
+        try {
+            $user->update($fields);
+        } catch (\Exception $e) {
+            Log::error('Error updating user: ' . $e->getMessage());
+            // Handle the error (e.g., return an error response)
+        }
+
+        return self::getResponse(true, "User has been updated", $user, 200);
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(User $user): JsonResponse
     {
-        //
+        $user->delete();
+        return self::getResponse(true, "User has been deleted", null, 200);
+
     }
+
+    /**
+     * Retrieve all guides
+     */
+    public function getAllGuides(): JsonResponse
+    {
+        $guides = User::where('role', 'guide')->get();
+        if (is_null($guides))
+            return self::getResponse(false, "No data available", null, 204);
+
+        return self::getResponse(true, "Data Retrieved ", $guides, 200);
+
+    }
+
+    public function getAllCustomers(): JsonResponse
+    {
+        $customers = User::where('role', 'user')->get();
+
+        if ($customers->isEmpty()) {
+            return self::getResponse(false, "No data available", null, 204);
+        }
+
+        return self::getResponse(true, "Data Retrieved ", $customers, 200);
+    }
+
 }

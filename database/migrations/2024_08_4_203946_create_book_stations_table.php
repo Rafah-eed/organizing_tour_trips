@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('is_opened', function (Blueprint $table) {
+        Schema::create('book_stations', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->foreignId('trip_id')->constrained();
-            $table->boolean('opened')->nullable()->default(false);
-            $table->Date('date');
-            $table->rememberToken();
+            $table->foreignId('station_id')->constrained();
+            $table->foreignId('user_id')->constrained();
+            $table->date('date'); // Corrected method name to lowercase
+            $table->integer('daysNum'); // Corrected method name to integer
+            $table->float('price');
             $table->timestamps();
         });
+
     }
 
     /**
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('is_opened');
+        Schema::dropIfExists('book_stations');
     }
 };

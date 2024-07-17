@@ -29,11 +29,11 @@ class Trip extends Model
 
     public function isOpened(): HasMany
     {
-        return $this->hasMany(IsOpened::class);
+        return $this->hasMany(Active::class);
     }
 
     public function stationTrips(): HasMany
     {
-        return $this->hasMany(stationTrip::class);
+        return $this->hasMany(StationTrip::class);
     }
 }

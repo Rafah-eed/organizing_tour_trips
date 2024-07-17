@@ -11,14 +11,14 @@ class Reservation extends Model
     use HasFactory;
 
     protected $fillable = [
-        'isOpened_id', 
+        'isOpened_id',
         'user_id',
         'reserve_statue'
     ];
 
     public function isOpened(): BelongsTo
     {
-        return $this->belongsTo(IsOpened::class);
+        return $this->belongsTo(Active::class);
     }
     public function user(): BelongsTo
     {

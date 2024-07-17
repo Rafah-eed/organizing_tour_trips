@@ -1,13 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-
-use App\Models\Category;
-use App\GeneralTraits;
 use Illuminate\Support\Facades\Hash;
 
 use App\Models\User;
@@ -19,7 +15,7 @@ class AuthController extends Controller
         $this->middleware('auth:api', ['except' => ['login','register']]);
     }
 
-    public function login(Request $request)
+    public function login(Request $request): \Illuminate\Http\JsonResponse
     {
         $request->validate([
             'email' => 'required|string|email',
@@ -47,20 +43,21 @@ class AuthController extends Controller
 
     }
 
-    public function register(Request $request){
+    public function register(Request $request): \Illuminate\Http\JsonResponse
+    {
         $request->validate([
             'name' => 'required|string|max:255',
             'fatherName' => 'required|string|max:255',
             'lastName' => 'required|string|max:255',
-            'phone' => 'required|string|max:255',
+            'phone' => 'required|numeric|digits:10',
             'address' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
             'bankName' => 'required|string|max:255',
-            'accountNumber' => 'required|string|max:255',
-            'tripsNumber' => 'required|string|max:255',
-          
+            'accountNumber' => 'required|numeric',
+            'role' => 'in:admin,guide,user'
         ]);
+
 
         $user = User::create([
             'name' => $request->name,
@@ -72,11 +69,11 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
             'bankName' => $request->bankName,
             'accountNumber' => $request->accountNumber,
-            'tripsNumber' => $request->tripsNumber
-            
+            'role' => $request->role
         ]);
 
         $token = Auth::login($user);
+
         return response()->json([
             'status' => 'success',
             'message' => 'User created successfully',

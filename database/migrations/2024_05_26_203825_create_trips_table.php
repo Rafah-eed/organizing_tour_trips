@@ -11,23 +11,26 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('book_stations', function (Blueprint $table) {
+        Schema::create('trips', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('stations_id')->constrained();
-            $table->foreignId('user_id')->constrained();
-            $table->date('date'); // Corrected method name to lowercase
-            $table->integer('daysNum'); // Corrected method name to integer
-            $table->float('price');
+            $table->string('name')->unique();
+            $table->string('description');
+            $table->string('photo');
+            $table->integer('capacity');
             $table->timestamps();
         });
-
     }
+
+
+
+
+
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('book_stations');
+        Schema::dropIfExists('trips');
     }
 };

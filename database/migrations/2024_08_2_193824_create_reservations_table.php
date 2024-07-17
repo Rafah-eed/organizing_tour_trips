@@ -11,27 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('trips', function (Blueprint $table) {
+        Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->string('description');
-            $table->string('photo');
-            // $table->boolean('is_open')->nullable()->default(false);
-            $table->integer('capacity');
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('active_id')->constrained();
+            $table->boolean('reserve_statue')->nullable()->default(true);
             $table->timestamps();
         });
     }
-
-
-
-
-
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('trips');
+        Schema::dropIfExists('reservations');
     }
 };

@@ -24,6 +24,7 @@ use App\Http\Controllers\TripController;
 
 Route::apiResource('trip', TripController::class);
 Route::apiResource('station', StationController::class);
+Route::apiResource('user', UserController::class);
 // Route::apiResource('bookStation', 'bookHotelController');
 // Route::apiResource('bookRestaurant', 'bookRestaurantController');
 // Route::apiResource('guide', 'guideController');
@@ -36,6 +37,11 @@ Route::apiResource('station', StationController::class);
 // Route::apiResource('user', 'userController');
 // Route::apiResource('userTrip', 'userTripController');
 // Route::apiResource('workGuide', 'workGuideController');
+
+Route::controller(UserController::class)->group(function () {
+    Route::get('getAllGuides', 'getAllGuides');
+    Route::get('getAllCustomers', 'getAllCustomers');
+});
 
 
 

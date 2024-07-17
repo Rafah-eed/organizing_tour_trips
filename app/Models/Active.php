@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class IsOpened extends Model
+class Active extends Model
 {
     use HasFactory;
 
@@ -30,7 +30,7 @@ class IsOpened extends Model
     {
         return $this->belongsTo(Trip::class);
     }
-    public function guide(): BelongsTo
+    public function guideDetails(): BelongsTo
     {
         return $this->belongsTo(GuidesDetails::class);
     }
