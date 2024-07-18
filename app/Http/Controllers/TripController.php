@@ -67,6 +67,7 @@ class TripController extends Controller
             'capacity' => $request->capacity
         ]);
 
+
         if (is_null($trip)) {
             return self::getResponse(true, "error in create ", null, 204);
         }
@@ -106,6 +107,8 @@ class TripController extends Controller
             // Handle the error (e.g., return an error response)
         }
 
+        $trip->station->attach($request->station_id);
+
         return self::getResponse(true, "Trip has been updated", $trip, 200);
     }
 
@@ -119,11 +122,38 @@ class TripController extends Controller
     }
 
 
+    public function attachStationToTrip(Request $request, $tripId): JsonResponse
+    {
+        // Retrieve the trip instance
+        $trip = Trip::find($tripId);
+
+        // Check if the trip exists
+        if (!$trip) {
+            return response()->json(['error' => 'Trip not found'], 404);
+        }
+
+        // Retrieve the station_id from the request
+        $stationId = $request->input('station_id');
+        $daysNum = $request->input('daysNum');
+
+        // Validate the station_id
+        if (!$stationId) {
+            return response()->json(['error' => 'Station ID is required'], 400);
+        }
+
+        // Attach the station to the trip
+        $trip->stations()->attach($stationId, ['daysNum' => $daysNum]);
+
+        // Return a successful response
+        return response()->json(['success' => 'Station attached successfully'], 200);
+    }
+
     /**
      * Get all stations for a certain trip
      */
     public function allStationsForTrip(Trip $trip): \Illuminate\Http\JsonResponse
     {
+
         $trip->load('stations');
 
         $stationsData = [];
