@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\StationController;
+use App\Http\Controllers\StationTripController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -25,7 +26,9 @@ use App\Http\Controllers\TripController;
 Route::apiResource('trip', TripController::class);
 Route::apiResource('station', StationController::class);
 Route::apiResource('user', UserController::class);
-// Route::apiResource('bookStation', 'bookHotelController');
+Route::apiResource('stationTrip', StationTripController::class);
+
+
 // Route::apiResource('bookRestaurant', 'bookRestaurantController');
 // Route::apiResource('guide', 'guideController');
 // Route::apiResource('guideTrip', 'guideTripController');
@@ -43,7 +46,7 @@ Route::controller(UserController::class)->group(function () {
     Route::get('getAllCustomers', 'getAllCustomers');
 });
 
-
+Route::get('/trip/{trip}/stations', [TripController::class, 'allStationsForTrip']);
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');

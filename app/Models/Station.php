@@ -28,4 +28,10 @@ class Station extends Model
     {
         return $this->hasMany(stationTrip::class);
     }
+
+    public function trips(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Trip::class, 'station_trips', 'station_id', 'trip_id')
+            ->withPivot('daysNum'); // Include any additional fields from the pivot table if needed
+    }
 }
