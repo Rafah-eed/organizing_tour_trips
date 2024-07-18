@@ -60,17 +60,17 @@ class TripController extends Controller
 
         $path = $request->file('photo')->storeAs('photos/images',$name,'public');
 
-        $trips = Trip::create([
+        $trip = Trip::create([
             'name' => $request->name,
             'description' => $request->description,
             'photo' => 'storage/'.$path,
             'capacity' => $request->capacity
         ]);
 
-        if (is_null($trips)) {
+        if (is_null($trip)) {
             return self::getResponse(true, "error in create ", null, 204);
         }
-        return self::getResponse(true, "product has been created", $trips, 200);
+        return self::getResponse(true, "product has been created", $trip, 200);
 
     }
 

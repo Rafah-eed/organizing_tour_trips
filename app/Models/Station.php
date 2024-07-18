@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Station extends Model
@@ -24,8 +25,8 @@ class Station extends Model
         return $this->hasMany(Station::class);
     }
 
-    public function stationTrips(): HasMany
+    public function trips(): BelongsToMany
     {
-        return $this->hasMany(stationTrip::class);
+        return $this->belongsToMany(stationTrip::class)->withPivot("daysNum");
     }
 }
