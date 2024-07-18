@@ -57,7 +57,7 @@ class StationController extends Controller
             'photo' => 'required|image',
             'address' => 'required|string|max:255',
             'contactInfo' => 'required|string|max:255',
-            'type' => 'enum'
+            'type' => 'in:restaurant,hotel,other'
         ]);
 
         $name =time().$request->photo->getClientOriginalName();
@@ -96,7 +96,7 @@ class StationController extends Controller
             'address' => 'required|string|max:255',
             'contactInfo'=> 'string',
             'type'=> 'enum'
-        
+
         ]);
 
         if ($request->has('photo')) {

@@ -117,4 +117,33 @@ class TripController extends Controller
         $trip->delete();
         return self::getResponse(true, "Trip has been deleted", null, 200);
     }
+
+
+    /**
+     * Get all stations for a certain trip
+     */
+    public function allStationsForTrip(Trip $trip): \Illuminate\Http\JsonResponse
+    {
+        $trip->load('stations');
+
+        $stationsData = [];
+
+        foreach ($trip->stations as $station) {
+            $stationsData[] = [
+                'id' => $station->id,
+                'name' => $station->name,
+                'description' => $station->description,
+                'photo' => $station->photo,
+                'address' => $station->address,
+                'contactInfo' => $station->contactInfo,
+                'type' => $station->type,
+            ];
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => $stationsData,
+        ], 200);
+
+    }
 }
