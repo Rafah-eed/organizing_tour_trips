@@ -190,12 +190,10 @@ class TripController extends Controller
         $query = Trip::query();
 
 
-            $query->where('name', 'like', '%' . $searchTerm . '%')
-                ->orWhere('description', 'like', '%' . $searchTerm . '%')->get();
+           $trips= $query->where('name', 'like', '%' . $searchTerm . '%')
+                ->orWhere('description', 'like', '%' . $searchTerm . '%')->orderBy('created_at', 'desc')->get();
 
         if (!empty($query)) {
-            $trips = $query->orderBy('created_at', 'desc');
-
             return response()->json([
                 'status' => true,
                 'data' => $trips,
