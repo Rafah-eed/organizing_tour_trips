@@ -121,7 +121,9 @@ class TripController extends Controller
         return self::getResponse(true, "Trip has been deleted", null, 200);
     }
 
-
+    /**
+     * attach stations to a trip
+     */
     public function attachStationToTrip(Request $request, $tripId): JsonResponse
     {
         // Retrieve the trip instance
@@ -176,4 +178,36 @@ class TripController extends Controller
         ], 200);
 
     }
+
+
+    /**
+     * search in trips
+     */
+    public function search(Request $request): JsonResponse
+    {
+        $searchTerm = $request->get('term');
+
+        $query = Trip::query();
+
+
+            $query->where('name', 'like', '%' . $searchTerm . '%')
+                ->orWhere('description', 'like', '%' . $searchTerm . '%');
+
+        if (!empty($query)) {
+            $trips = $query->orderBy('created_at', 'desc');
+
+            return response()->json([
+                'status' => true,
+                'data' => $trips,
+            ], 200);
+
+        }
+
+        return response()->json([
+            'status' => false,
+            'data' => "the searched Item does not exist... Try different words ",
+        ], 200);
+
+    }
+
 }

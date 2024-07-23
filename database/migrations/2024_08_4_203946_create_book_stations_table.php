@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->date('date'); // Corrected method name to lowercase
             $table->integer('daysNum'); // Corrected method name to integer
-            $table->float('price');
             $table->timestamps();
         });
 

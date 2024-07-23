@@ -14,10 +14,10 @@ class Active extends Model
     protected $fillable = [
         'name',
         'trip_id',
-        'guide_id',
-        'is_opened',
-        'capacity',
-        'date'
+        'user_id',// which is the guide ID
+        'isOpened',
+        'date',
+        'price'
     ];
 
     public function reservations(): HasMany

@@ -14,8 +14,7 @@ class bookStation extends Model
         'station_id',
         'user_id',
         'date',
-        'daysNum',
-        'price'
+        'daysNum'
     ];
 
     public function hotel(): BelongsTo
