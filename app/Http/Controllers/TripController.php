@@ -191,7 +191,7 @@ class TripController extends Controller
 
 
             $query->where('name', 'like', '%' . $searchTerm . '%')
-                ->orWhere('description', 'like', '%' . $searchTerm . '%');
+                ->orWhere('description', 'like', '%' . $searchTerm . '%')->get();
 
         if (!empty($query)) {
             $trips = $query->orderBy('created_at', 'desc');
