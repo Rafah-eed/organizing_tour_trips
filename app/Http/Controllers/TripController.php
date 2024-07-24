@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Trip;
@@ -210,19 +211,6 @@ class TripController extends Controller
     }
 
     /**
-     * filter according to time,price and place
-     */
-//    public function filter(Request $request): JsonResponse
-//    {
-//        $trips = Trip::query();
-//
-////        if ($request->has('price')) {
-////            $trips=$trips->whereHas()
-////        }
-//    }
-
-
-    /**
      * Activate a Trip
      */
     public function activate(Request $request, $trip_id): JsonResponse
@@ -231,7 +219,7 @@ class TripController extends Controller
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'isOpened' => 'required',
-            'date' => 'required|date',
+            'start_date' => 'required|date',
             'price' => 'required|numeric'
         ]);
 
@@ -246,11 +234,11 @@ class TripController extends Controller
         // Retrieve the columns from the request
         $user_id = $request->input('user_id');
         $isOpened = $request->input('isOpened');
-        $date = $request->input('date');
+        $start_date = $request->input('start_date');
         $price = $request->input('price');
         // Validate the request data
 
-        if (!$user_id || !$isOpened || !$date || !$price) {
+        if (!$user_id || !$isOpened || !$start_date || !$price) {
             return response()->json(['error' => 'Missing required data'], 400);
         }
 
@@ -258,15 +246,62 @@ class TripController extends Controller
         try {
             $trip->users()->attach($user_id, [
                 'isOpened' => $isOpened,
-                'date' => $date,
+                'start_date' => $start_date,
                 'price' => $price
             ]);
         } catch (\Exception $e) {
             Log::error("Failed to update trip status: " . $e->getMessage());
-            return response()->json(['error' => 'Failed to update trip status'], 500);
+            return response()->json($e, 500);
         }
 
         // Return a successful response
         return response()->json(['success' => 'Trip status updated successfully'], 200);
     }
+    /**
+     * filter according to time,price and place
+     */
+    public function filter(Request $request): JsonResponse
+    {
+        $trips = Trip::query();
+
+        if ($request->has('price')) {
+            $trips = $trips->whereHas('actives', function ($query) use ($request) {
+                $query->where('price', '=', (int)$request->price); //we can use >= or <= for min and max operations
+            });
+              //  ->orderBy('actives.price', 'desc'); // Order by start_date in descending order;
+        }
+
+        if ($request->has('name')) {
+            $trips = $trips->where('name', 'like', "%{$request->name}%");
+        }
+
+        if ($request->has('start_date')) {
+            $trips = $trips->whereHas('actives', function ($query) use ($request) {
+                $query->whereDate('start_date', $request->start_date);
+            });
+              //  ->orderBy('actives.start_date', 'desc'); // Order by start_date in descending order
+        }
+
+
+        // Fetch the filtered trips
+        $filteredTrips = $trips->get();
+
+        // Return the filtered trips as a JSON response
+        if (!empty($filteredTrips)) {
+            return response()->json([
+                'status' => true,
+                'data' => $filteredTrips,
+            ], 200);
+
+        }
+        return response()->json([
+            'status' => false,
+            'data' => "There are no trips yet ",
+        ], 200);
+
+
+
+    }
+
+
 }

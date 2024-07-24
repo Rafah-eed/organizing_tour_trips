@@ -15,7 +15,7 @@ class Active extends Model
         'trip_id',
         'user_id',// which is the guide ID
         'isOpened',
-        'date',
+        'start_date',
         'price'
     ];
 

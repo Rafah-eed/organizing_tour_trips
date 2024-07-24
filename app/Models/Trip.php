@@ -28,7 +28,7 @@ class Trip extends Model
         return $this->hasMany(Comment::class);
     }
 
-    public function active(): HasMany
+    public function actives(): HasMany
     {
         return $this->hasMany(Active::class);
     }
