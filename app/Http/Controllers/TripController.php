@@ -212,14 +212,14 @@ class TripController extends Controller
     /**
      * filter according to time,price and place
      */
-    public function filter(Request $request): JsonResponse
-    {
-        $trips = Trip::query();
-
-//        if ($request->has('price')) {
-//            $trips=$trips->whereHas()
-//        }
-    }
+//    public function filter(Request $request): JsonResponse
+//    {
+//        $trips = Trip::query();
+//
+////        if ($request->has('price')) {
+////            $trips=$trips->whereHas()
+////        }
+//    }
 
 
     /**
@@ -227,6 +227,13 @@ class TripController extends Controller
      */
     public function activate(Request $request, $trip_id): JsonResponse
     {
+
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'isOpened' => 'required',
+            'date' => 'required|date',
+            'price' => 'required|numeric'
+        ]);
 
         // Retrieve the trip instance
         $trip = Trip::find($trip_id);
