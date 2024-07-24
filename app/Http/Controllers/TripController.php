@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Trip;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class TripController extends Controller
 {
@@ -208,4 +209,57 @@ class TripController extends Controller
 
     }
 
+    /**
+     * filter according to time,price and place
+     */
+    public function filter(Request $request): JsonResponse
+    {
+        $trips = Trip::query();
+
+//        if ($request->has('price')) {
+//            $trips=$trips->whereHas()
+//        }
+    }
+
+
+    /**
+     * Activate a Trip
+     */
+    public function activate(Request $request, $trip_id): JsonResponse
+    {
+
+        // Retrieve the trip instance
+        $trip = Trip::find($trip_id);
+
+        // Check if the trip exists
+        if (!$trip) {
+            return response()->json(['error' => 'Trip not found'], 404);
+        }
+
+        // Retrieve the columns from the request
+        $user_id = $request->input('user_id');
+        $isOpened = $request->input('isOpened');
+        $date = $request->input('date');
+        $price = $request->input('price');
+        // Validate the request data
+
+        if (!$user_id || !$isOpened || !$date || !$price) {
+            return response()->json(['error' => 'Missing required data'], 400);
+        }
+
+        // Attach the user to the trip with the active state
+        try {
+            $trip->users()->attach($user_id, [
+                'isOpened' => $isOpened,
+                'date' => $date,
+                'price' => $price
+            ]);
+        } catch (\Exception $e) {
+            Log::error("Failed to update trip status: " . $e->getMessage());
+            return response()->json(['error' => 'Failed to update trip status'], 500);
+        }
+
+        // Return a successful response
+        return response()->json(['success' => 'Trip status updated successfully'], 200);
+    }
 }

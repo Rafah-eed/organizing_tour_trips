@@ -49,6 +49,8 @@ Route::controller(UserController::class)->group(function () {
 Route::get('/trip/{trip}/stations', [TripController::class, 'allStationsForTrip']);
 Route::post('/trip/{trip}/stations', [TripController::class, 'attachStationToTrip']);
 Route::post('/trip/search', [TripController::class, 'search']);
+Route::post('/trip/filter', [TripController::class, 'filter']);
+Route::post('/trip/{trip_id}/activate', [TripController::class, 'activate']);
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');

@@ -13,7 +13,6 @@ class bookStation extends Model
     protected $fillable = [
         'station_id',
         'user_id',
-        'date',
         'daysNum'
     ];
 

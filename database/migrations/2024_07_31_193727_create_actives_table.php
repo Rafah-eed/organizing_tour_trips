@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('actives', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->foreignId('trip_id')->constrained();
             $table->foreignId('user_id')->constrained();// which is the guide
             $table->boolean('isOpened')->nullable()->default(false);
-            $table->Date('date');
+            $table->timestamp('start_date');
             $table->float('price');
             $table->timestamps();
         });

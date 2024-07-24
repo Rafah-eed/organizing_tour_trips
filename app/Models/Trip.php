@@ -28,7 +28,7 @@ class Trip extends Model
         return $this->hasMany(Comment::class);
     }
 
-    public function isOpened(): HasMany
+    public function active(): HasMany
     {
         return $this->hasMany(Active::class);
     }
@@ -38,5 +38,11 @@ class Trip extends Model
     {
         return $this->belongsToMany(Station::class, 'station_trips')
             ->withPivot('daysNum'); // Include any additional fields from the pivot table if needed
+    }
+
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class , 'actives')
+            ->withPivot('isOpened','date','price');
     }
 }

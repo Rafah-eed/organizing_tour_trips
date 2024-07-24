@@ -12,7 +12,6 @@ class Active extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
         'trip_id',
         'user_id',// which is the guide ID
         'isOpened',
@@ -30,8 +29,9 @@ class Active extends Model
     {
         return $this->belongsTo(Trip::class);
     }
-    public function guideDetails(): BelongsTo
+
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(GuidesDetails::class);
+        return $this->belongsTo(User::class);
     }
 }
