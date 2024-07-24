@@ -11,9 +11,10 @@ class Comment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'trip_id', 
+        'trip_id',
         'user_id',
-        'comment'
+        'comment',
+        'rating'
     ];
 
     public function trip(): BelongsTo

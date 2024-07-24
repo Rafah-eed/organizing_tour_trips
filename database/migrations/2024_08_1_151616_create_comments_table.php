@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('trip_id')->constrained();
             $table->foreignId('user_id')->constrained();
-            $table->string('comment');
+            $table->string('comment')->nullable();
+            $table->integer('rating');
             $table->timestamps();
         });
     }
