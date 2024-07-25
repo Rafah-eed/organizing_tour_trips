@@ -210,58 +210,70 @@ class TripController extends Controller
 
     }
 
-//    /**
-//     * Activate a Trip
-//     */
-//    public function activate(Request $request, $trip_id): JsonResponse
-//    {
-//
-//        // Retrieve the trip instance
-//        $trip = Trip::find($trip_id);
-//
-//        // Check if the trip exists
-//        if (!$trip) {
-//            return response()->json(['error' => 'Trip not found'], 404);
-//        }
-//
-//        $user_id = $request->input('user_id');//guide ID
-//
-//        if ($trip->users()->where('user_id', $user_id)->count() > 0) {
-//            return response()->json(['guide already exists'], 200);
-//        }
-//        elseif $trip->users()->where('user_id', $new_user_id)->exists()()
-//        else
-//        {
-//            $user_id = $request->input('user_id');//guide ID
-//            $isOpened = $request->input('isOpened');
-//            $start_date = $request->input('start_date');
-//            $price = $request->input('price');
-//
-//            if (!$user_id || !$isOpened || !$start_date || !$price) {
-//                return response()->json(['error' => 'Missing required data'], 400);
-//            }
-//
-//            $request->validate([
-//                'user_id' => 'required|exists:users,id',
-//                'isOpened'=>'required|boolean',
-//                'start_date' => 'required|date',
-//                'price' => 'required|numeric'
-//            ]);
-//            // Attach the user to the trip with the active state
-//            try {
-//                $trip->users()->attach($user_id, [
-//                    'isOpened' => $isOpened,
-//                    'start_date' => $start_date,
-//                    'price' => $price
-//                ]);
-//            } catch (\Exception $e) {
-//                Log::error("Failed to update trip status: " . $e->getMessage());
-//                return response()->json($e, 500);
-//            }
-//        }
-//        // Return a successful response
-//        return response()->json(['success' => 'Trip status updated successfully'], 200);
-//    }
+    /**
+     * Activate a Trip
+     */
+    public function activate(Request $request, $trip_id): JsonResponse
+    {
+        $trip = Trip::find($trip_id);
+
+        if (!$trip) {
+            return response()->json(['error' => 'Trip not found'], 404);
+        }
+
+        $user_id = $request->input('user_id');
+        $operation_mode = $request->input('operation_mode');
+
+        if ($operation_mode === 'update_user_id_only')
+        {
+            $currentUserId = $trip->users()->first()->user_id;
+
+            if ($currentUserId !== $user_id) {
+                $trip->users()->detach($currentUserId);
+                $trip->users()->attach($user_id);
+
+                return response()->json(['success' => 'User ID updated successfully'], 200);
+            }
+            else {
+                return response()->json(['error' => 'No change needed, user ID is already up-to-date'], 200);
+            }
+
+        }
+        elseif ($operation_mode === 'update_all_columns') {
+            $isOpened = $request->input('isOpened');
+            $start_date = $request->input('start_date');
+            $price = $request->input('price');
+
+            if (!$user_id || !$isOpened || !$start_date || !$price) {
+                return response()->json(['error' => 'Missing required data'], 400);
+            }
+
+            $request->validate([
+                'user_id' => 'required|exists:users,id',
+                'isOpened' => 'required|boolean',
+                'start_date' => 'required',
+                'price' => 'required|numeric'
+            ]);
+
+            // Update the existing pivot record with all the new values
+            try {
+                $trip->users()->attach($user_id, [
+                    'isOpened' => $isOpened,
+                    'start_date' => $start_date,
+                    'price' => $price
+                ]);
+            } catch (\Exception $e) {
+                Log::error("Failed to update trip status: " . $e->getMessage());
+                return response()->json($e, 500);
+            }
+            return response()->json(['success' => 'All columns updated successfully'], 200);
+        }
+        else {
+            // Invalid operation mode
+            return response()->json(['error' => 'Invalid operation mode'], 400);
+        }
+    }
+
     /**
      * filter according to time,price and place
      */

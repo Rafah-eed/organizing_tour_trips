@@ -55,43 +55,5 @@ class GuidesDetailsController extends Controller
 
         }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(GuidesDetails $request)
-    {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(GuidesDetails $guide)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(GuidesDetails $guide)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, GuidesDetails $guide)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(GuidesDetails $guide)
-    {
-        //
-    }
 }
