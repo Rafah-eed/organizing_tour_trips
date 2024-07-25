@@ -32,6 +32,9 @@ Route::apiResource('stationTrip', StationTripController::class);
 Route::apiResource('comment', CommentController::class);
 Route::post('/guidesDetails', [GuidesDetailsController::class, 'create']);
 Route::post('/trip/{trip_id}', [TripController::class, 'tripById']);
+
+
+
 // Route::apiResource('bookRestaurant', 'bookRestaurantController');
 // Route::apiResource('guide', 'guideController');
 // Route::apiResource('guideTrip', 'guideTripController');
@@ -54,6 +57,8 @@ Route::post('/trip/{trip}/stations', [TripController::class, 'attachStationToTri
 Route::post('/trip/search', [TripController::class, 'search']);
 Route::post('/trip/filter', [TripController::class, 'filter']);
 Route::post('/trip/{trip_id}/activate', [TripController::class, 'activate']);
+Route::post('/trip/changeGuide/{active_id}', [TripController::class, 'updateUserInTrip']);
+
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');

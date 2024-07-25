@@ -219,6 +219,7 @@ class TripController extends Controller
 
     /**
      * Activate a Trip
+     * update_all_columns
      */
     public function activate(Request $request, $trip_id): JsonResponse
     {
@@ -230,52 +231,18 @@ class TripController extends Controller
 
         $request->validate([
             'user_id' => 'required|exists:users,id',
-            'operation_mode' => 'required|in:update_user_id_only,update_all_columns'
+            'isOpened' => 'required|boolean',
+            'start_date' => 'required',
+            'price' => 'required|numeric'
         ]);
+
         $user_id = $request->input('user_id');
-        $operation_mode = $request->input('operation_mode');
-
-        if ($operation_mode === 'update_user_id_only')
-        {
-            $currentUserId = $trip->users()->first()->user_id;
-
-            if ($currentUserId !== $user_id) {
-                $instanceUser = Active::where('trip_id', $trip->id)->first();
-
-                if ($instanceUser) {
-
-                   $id = $instanceUser->id;
-
-                   $trip->users()->detach($currentUserId);
-
-                    $trip->users()->attach($user_id, [
-                        'isOpened' => $instanceUser->isOpened,
-                        'start_date' => $instanceUser->start_date,
-                        'price' => $instanceUser->price
-                    ]);
-            }
-                return response()->json(['success' => 'User ID updated successfully'], 200);
-            }
-            else {
-                return response()->json(['error' => 'No change needed, user ID is already up-to-date'], 200);
-            }
-
-        }
-        elseif ($operation_mode === 'update_all_columns') {
-            $isOpened = $request->input('isOpened');
-            $start_date = $request->input('start_date');
-            $price = $request->input('price');
+        $isOpened = $request->input('isOpened');
+        $start_date = $request->input('start_date');$price = $request->input('price');
 
             if (!$user_id || !$isOpened || !$start_date || !$price) {
                 return response()->json(['error' => 'Missing required data'], 400);
             }
-
-            $request->validate([
-                'user_id' => 'required|exists:users,id',
-                'isOpened' => 'required|boolean',
-                'start_date' => 'required',
-                'price' => 'required|numeric'
-            ]);
 
             // Update the existing pivot record with all the new values
             try {
@@ -289,12 +256,44 @@ class TripController extends Controller
                 return response()->json($e, 500);
             }
             return response()->json(['success' => 'All columns updated successfully'], 200);
-        }
-        else {
-            // Invalid operation mode
-            return response()->json(['error' => 'Invalid operation mode'], 400);
-        }
+
     }
+
+
+
+    public function updateUserInTrip(Request $request, $active_id): JsonResponse
+    {
+        $pivotRecord = Active::find($active_id);
+
+        if (!$pivotRecord) {
+            return response()->json(['error' => 'Pivot table record not found'], 404);
+        }
+
+        $tripId = $pivotRecord->trip_id;
+        $userId = $pivotRecord->user_id;
+
+        // Correctly compare the user IDs
+        if ($request->user_id == $userId) {
+            // If the user IDs match, return a success response without updating anything
+            return response()->json(['success' => 'No changes needed, user ID is already up-to-date'], 200);
+        }
+
+        // Proceed with the update only if the user IDs do not match
+        $pivotRecord->update([
+            'user_id' => $request->user_id, // Use the new user ID from the request
+            'trip_id' => $tripId,
+            'isOpened' => $pivotRecord->isOpened,
+            'start_date' => $pivotRecord->start_date,
+            'price' => $pivotRecord->price
+        ]);
+
+        return response()->json(['success' => 'Pivot table record updated successfully'], 200);
+    }
+
+
+
+
+
 
     /**
      * filter according to time,price and place

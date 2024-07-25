@@ -12,8 +12,8 @@ class Active extends Model
     use HasFactory;
 
     protected $fillable = [
-        'trip_id',
         'user_id',// which is the guide ID
+        'trip_id',
         'isOpened',
         'start_date',
         'price'
