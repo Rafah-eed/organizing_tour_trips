@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->integer('TotalTrips');  //The number of trips the guide Should go in a month
-            $table->float('salary');
+            $table->unsignedBigInteger('salary');
             $table->rememberToken();
             $table->timestamps();
         });

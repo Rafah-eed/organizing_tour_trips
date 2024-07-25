@@ -88,4 +88,9 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsToMany(Trip::class)
             ->withPivot('isOpened','date','price');
     }
+
+    public function isGuide(): bool
+    {
+        return $this->role === 'guide';
+    }
 }

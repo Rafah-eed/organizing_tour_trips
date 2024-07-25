@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('active_id')->constrained();
-            $table->boolean('reserve_statue')->nullable()->default(true);
+            $table->foreignId('user_id')->constrained();//our customer
+            $table->foreignId('active_id')->constrained();// the ongoing trip
+            $table->boolean('reserve_statue')->nullable()->default(true);//is the reservation still valid ?
             $table->timestamps();
         });
     }

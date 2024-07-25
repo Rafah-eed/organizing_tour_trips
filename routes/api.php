@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\GuidesDetailsController;
 use App\Http\Controllers\StationController;
 use App\Http\Controllers\StationTripController;
 use Illuminate\Http\Request;
@@ -29,7 +30,7 @@ Route::apiResource('station', StationController::class);
 Route::apiResource('user', UserController::class);
 Route::apiResource('stationTrip', StationTripController::class);
 Route::apiResource('comment', CommentController::class);
-
+Route::post('/guidesDetails', [GuidesDetailsController::class, 'create']);
 // Route::apiResource('bookRestaurant', 'bookRestaurantController');
 // Route::apiResource('guide', 'guideController');
 // Route::apiResource('guideTrip', 'guideTripController');

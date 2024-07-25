@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\guideTrip;
-use App\Http\Requests\StoreguideTripRequest;
-use App\Http\Requests\UpdateguideTripRequest;
+use App\Models\GuidesDetails;
+use http\Env\Request;
+
 
 class GuideTripController extends Controller
 {
@@ -27,7 +27,7 @@ class GuideTripController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreguideTripRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class GuideTripController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(guideTrip $guideTrip)
+    public function show(GuidesDetails $guideTrip)
     {
         //
     }
@@ -43,7 +43,7 @@ class GuideTripController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(guideTrip $guideTrip)
+    public function edit(GuidesDetails $guideTrip)
     {
         //
     }
@@ -51,7 +51,7 @@ class GuideTripController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateguideTripRequest $request, guideTrip $guideTrip)
+    public function update(GuidesDetails $request, GuidesDetails $guideTrip)
     {
         //
     }
@@ -59,7 +59,7 @@ class GuideTripController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(guideTrip $guideTrip)
+    public function destroy(GuidesDetails $guideTrip)
     {
         //
     }
