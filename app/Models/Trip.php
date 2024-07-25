@@ -43,6 +43,6 @@ class Trip extends Model
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class , 'actives')
-            ->withPivot('isOpened','date','price');
+            ->withPivot('isOpened','start_date','price');
     }
 }

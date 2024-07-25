@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Active;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -221,6 +222,10 @@ class TripController extends Controller
             return response()->json(['error' => 'Trip not found'], 404);
         }
 
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'operation_mode' => 'required|in:update_user_id_only,update_all_columns'
+        ]);
         $user_id = $request->input('user_id');
         $operation_mode = $request->input('operation_mode');
 
@@ -229,9 +234,21 @@ class TripController extends Controller
             $currentUserId = $trip->users()->first()->user_id;
 
             if ($currentUserId !== $user_id) {
-                $trip->users()->detach($currentUserId);
-                $trip->users()->attach($user_id);
+                $instanceUser = Active::where('trip_id', $trip->id)->first();
 
+                if ($instanceUser) {
+//                    $isOpened = $instanceUser->input('isOpened');
+//                    $start_date = $instanceUser->input('start_date');
+//                    $price = $instanceUser->input('price');
+
+                    $trip->users()->detach($currentUserId);
+
+                    $trip->users()->attach($user_id, [
+                        'isOpened' => $instanceUser->isOpened,
+                        'start_date' => $instanceUser->start_date,
+                        'price' => $instanceUser->price
+                    ]);
+            }
                 return response()->json(['success' => 'User ID updated successfully'], 200);
             }
             else {
