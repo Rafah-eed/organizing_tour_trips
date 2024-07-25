@@ -31,6 +31,7 @@ Route::apiResource('user', UserController::class);
 Route::apiResource('stationTrip', StationTripController::class);
 Route::apiResource('comment', CommentController::class);
 Route::post('/guidesDetails', [GuidesDetailsController::class, 'create']);
+Route::post('/trip/{trip_id}', [TripController::class, 'tripById']);
 // Route::apiResource('bookRestaurant', 'bookRestaurantController');
 // Route::apiResource('guide', 'guideController');
 // Route::apiResource('guideTrip', 'guideTripController');

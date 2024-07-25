@@ -19,6 +19,7 @@ return new class extends Migration
             $table->timestamp('start_date');
             $table->float('price');
             $table->timestamps();
+            $table->unique(['trip_id', 'user_id', 'start_date']);
         });
     }
 

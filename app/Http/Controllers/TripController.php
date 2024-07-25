@@ -34,11 +34,17 @@ class TripController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return JsonResponse
      */
-    public function create(): Response
+    public function tripById($trip_id): JsonResponse
     {
-        return (Response());
+        $trip = Trip::find($trip_id);
+        if($trip) {
+            return self::getResponse(true, "trip has been retrieved", $trip, 200);
+        }
+        else {
+            return self::getResponse(false, "trip not found", $trip, 404);
+        }
     }
 
     /**
@@ -237,11 +243,10 @@ class TripController extends Controller
                 $instanceUser = Active::where('trip_id', $trip->id)->first();
 
                 if ($instanceUser) {
-//                    $isOpened = $instanceUser->input('isOpened');
-//                    $start_date = $instanceUser->input('start_date');
-//                    $price = $instanceUser->input('price');
 
-                    $trip->users()->detach($currentUserId);
+                   $id = $instanceUser->id;
+
+                   $trip->users()->detach($currentUserId);
 
                     $trip->users()->attach($user_id, [
                         'isOpened' => $instanceUser->isOpened,
