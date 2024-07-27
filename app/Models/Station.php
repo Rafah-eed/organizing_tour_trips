@@ -19,11 +19,13 @@ class Station extends Model
         'type'
     ];
 
-
-    public function restaurants(): HasMany
+    // In Station.php model
+    public function users()
     {
-        return $this->hasMany(Station::class);
+        return $this->belongsToMany(User::class, 'bookstation');
     }
+
+
 
     public function trips(): BelongsToMany
     {

@@ -3,33 +3,68 @@
 namespace App\Http\Controllers;
 
 use App\Models\bookStation;
-use App\Http\Requests\StorebookRestaurantRequest;
-use App\Http\Requests\UpdatebookRestaurantRequest;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
+
 
 class BookStationController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
     /**
      * Display a listing of the resource.
+     * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        $stations = bookStation::all();
+        if (is_null($stations))
+            return self::getResponse(false, "No data available", null, 204);
+
+        return self::getResponse(true, "all booking records for stations has been retrieved", $stations, 200);
+
     }
 
     /**
      * Show the form for creating a new resource.
+     *
+     * @return Response
      */
-    public function create()
+    public function create(): Response
     {
-        //
+        return (Response());
     }
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function store(StorebookRestaurantRequest $request)
+    public function store(Request $request)
     {
-        //
+        $request->validate([
+            'station_id' => 'required','exists:stations,id',
+            'user_id' => 'required','exists:users,id',
+            'daysNum' => 'required',
+        ]);
+
+        $bookStation = bookStation::create([
+            'station_id' => $request->station_id,
+            'user_id' => $request->user_id,
+            'daysNum' => $request->daysNum
+        ]);
+
+        if (is_null($bookStation)) {
+            return self::getResponse(true, "error in create ", null, 204);
+        }
+        return self::getResponse(true, "the station has been reserved", $bookStation, 200);
+
     }
 
     /**
@@ -51,7 +86,7 @@ class BookStationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatebookRestaurantRequest $request, bookStation $bookStation)
+    public function update(Request $request, bookStation $bookStation)
     {
         //
     }
@@ -61,6 +96,8 @@ class BookStationController extends Controller
      */
     public function destroy(bookStation $bookStation)
     {
-        //
+        $bookStation->delete();
+        return self::getResponse(true, "the reservation of the station has been deleted", null, 200);
     }
+
 }

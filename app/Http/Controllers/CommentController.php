@@ -48,7 +48,6 @@ class CommentController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-
         $request->validate([
             'trip_id' => 'required','exists:trips,id',
             'user_id' => 'required','exists:users,id',

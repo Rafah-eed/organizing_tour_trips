@@ -16,7 +16,7 @@ class bookStation extends Model
         'daysNum'
     ];
 
-    public function hotel(): BelongsTo
+    public function station(): BelongsTo
     {
         return $this->belongsTo(Station::class);
     }

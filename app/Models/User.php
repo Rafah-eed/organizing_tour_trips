@@ -89,6 +89,12 @@ class User extends Authenticatable implements JWTSubject
             ->withPivot('isOpened','start_date','price');
     }
 
+    // In User.php model
+    public function stations()
+    {
+        return $this->belongsToMany(Station::class, 'bookstation');
+    }
+
     public function isGuide(): bool
     {
         return $this->role === 'guide';
