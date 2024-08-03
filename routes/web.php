@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+//Route::get('/rate-app', [CommentController::class,'redirectToGooglePlay']);
 
 
 //Route::get('/trip', [\App\Http\Controllers\TripController::class, 'add']);//->middleware('debug');

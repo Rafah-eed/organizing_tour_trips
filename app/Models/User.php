@@ -86,7 +86,7 @@ class User extends Authenticatable implements JWTSubject
     public function trip(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Trip::class)
-            ->withPivot('isOpened','start_date','price');
+            ->withPivot('isOpened','start_date','price','has_paid','reserve_statue');
     }
 
     // In User.php model

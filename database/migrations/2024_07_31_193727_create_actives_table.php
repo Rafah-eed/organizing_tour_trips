@@ -18,6 +18,8 @@ return new class extends Migration
             $table->boolean('isOpened')->nullable()->default(false);
             $table->timestamp('start_date');
             $table->float('price');
+            $table->boolean('has_paid')->nullable()->default(false);
+            $table->boolean('reserve_statue')->nullable()->default(true);
             $table->timestamps();
             $table->unique(['trip_id', 'user_id', 'start_date']);
         });

@@ -6,11 +6,13 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 
 class UserController extends Controller
 {
+
     public function __construct()
     {
         $this->middleware('auth:api');
@@ -123,5 +125,72 @@ class UserController extends Controller
 
         return self::getResponse(true, "Data Retrieved ", $customers, 200);
     }
+
+    protected $albarakaApiKey = 'your_api_key_here';
+    protected $albarakaApiSecret = 'your_api_secret_here'; // modify according to the company's acccout
+
+    public function payWithBank(Request $request): JsonResponse
+    {
+        $user_id = $request->input('user_id');
+        $amount = $request->input('price');
+
+        $user = User::find($user_id);
+
+        if (!$user ) {
+            return response()->json(['error' => 'User does not exist'], 403);
+        }
+
+        // Prepare the request body
+        $body = [
+            "amountToBeSend" => $amount,
+            "bankCode" => 203, // Example bank code, replace with actual
+            "bankName" => $user->bankName,
+            "context" => [
+                "channel" => "APIBANK",
+                "language" => "en", // Adjust language as per your requirement
+            ],
+            "currencyCode" => null, // Adjust as per your requirement
+            "date" => date("Y-m-d"), // Current date
+            "explanation" => "Payment explanation", // Customize as needed
+            "isReceiptIbanVisible" => true,
+            "isfastTransfer" => false,
+            "oyak" => true,
+            "receiverAccountIdentifier" => [
+                "branchCode" => 0, // Example values, replace with actual
+                "number" => 0,
+                "numberDetail" => "",
+                "suffix" => 0,
+            ],
+            "senderAccount" => [
+                "branchCode" => 0, // Example values, replace with actual
+                "number" => 0,
+                "numberDetail" => $user->accountNumber, // Assuming this is the sender's account number
+                "suffix" => 0,
+            ],
+            "senderIban" => $user->iban, // Assuming you have the sender's IBAN
+            "transferReason" => "D", // Customize as needed
+        ];
+
+        $generated_token = Auth::attempt(\request(null));
+        $response = $user->post('https://api.albarakat.com/moneytransfers/v2/transfer/toaccountno', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $generated_token,
+                'Content-Type' => 'application/json',
+            ],
+            'json' => $body,
+        ]);
+
+        $responseData = json_decode((string)$response->getBody(), true);
+
+        if ($responseData['header']['status'] == 'SUCCESS') {
+            // Handle successful payment
+            $user->updatePaymentStatus(true);
+            return response()->json(['message' => 'Payment processed successfully']);
+        } else {
+            // Handle payment failure
+            return response()->json(['error' => 'Payment failed'], 400);
+        }
+    }
+
 
 }

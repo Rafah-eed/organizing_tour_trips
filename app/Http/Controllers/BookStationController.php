@@ -51,12 +51,14 @@ class BookStationController extends Controller
         $request->validate([
             'station_id' => 'required','exists:stations,id',
             'user_id' => 'required','exists:users,id',
+            'date' => 'required | date',
             'daysNum' => 'required',
         ]);
 
         $bookStation = bookStation::create([
             'station_id' => $request->station_id,
             'user_id' => $request->user_id,
+            'date' => $request->date,
             'daysNum' => $request->daysNum
         ]);
 

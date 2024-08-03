@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\BookStationController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\GuidesDetailsController;
+use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\StationController;
 use App\Http\Controllers\StationTripController;
 use Illuminate\Http\Request;
@@ -30,8 +32,11 @@ Route::apiResource('station', StationController::class);
 Route::apiResource('user', UserController::class);
 Route::apiResource('stationTrip', StationTripController::class);
 Route::apiResource('comment', CommentController::class);
+Route::apiResource('reserve', ReservationController::class);
+Route::apiResource('bookStation', bookStationController::class);
 Route::post('/guidesDetails', [GuidesDetailsController::class, 'create']);
 Route::post('/trip/{trip_id}', [TripController::class, 'tripById']);
+Route::get('/rate-app', [CommentController::class,'redirectToGooglePlay']);
 
 
 
@@ -58,7 +63,9 @@ Route::post('/trip/search', [TripController::class, 'search']);
 Route::post('/trip/filter', [TripController::class, 'filter']);
 Route::post('/trip/{trip_id}/activate', [TripController::class, 'activate']);
 Route::post('/trip/changeGuide/{active_id}', [TripController::class, 'updateUserInTrip']);
-
+Route::post('/trip/payInPerson/{active_id}', [TripController::class, 'payInPerson']);
+Route::post('/trip/unreservedTrip/{active_id}', [TripController::class, 'unreservedTrip']);
+Route::post('/user/payWithBank', [UserController::class, 'payWithBank']);
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');

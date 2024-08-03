@@ -120,4 +120,11 @@ class CommentController extends Controller
         return self::getResponse(true, "Comment has been deleted", null, 200);
     }
 
+    public function redirectToGooglePlay(): \Illuminate\Http\RedirectResponse
+    {
+       // $appPackageName = 'com.yourcompany.yourappname'; // Replace with your actual app package name
+        $url = 'https://play.google.com/store/apps/details?id=com.instagram.android' ;//. $appPackageName;
+        return redirect()->away($url);
+    }
+
 }
