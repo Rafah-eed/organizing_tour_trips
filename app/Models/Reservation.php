@@ -13,7 +13,8 @@ class Reservation extends Model
     protected $fillable = [
         'user_id',
         'active_id',
-        'reserve_statue'
+        'reserve_statue',
+        'has_paid'
     ];
 
     public function active(): BelongsTo

@@ -83,10 +83,10 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasOne(GuidesDetails::class);
     }
 
-    public function trip(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function trips(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Trip::class)
-            ->withPivot('isOpened','start_date','price','has_paid','reserve_statue');
+            ->withPivot('isOpened','start_date','price');
     }
 
     // In User.php model
@@ -99,4 +99,10 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->role === 'guide';
     }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
 }

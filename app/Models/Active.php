@@ -16,9 +16,7 @@ class Active extends Model
         'trip_id',
         'isOpened',
         'start_date',
-        'price',
-        'has_paid',
-        'reserve_statue'
+        'price'
     ];
 
     public function reservations(): HasMany

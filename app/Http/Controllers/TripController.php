@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 use App\Models\Active;
+use App\Models\Reservation;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Trip;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
+
 
 
 class TripController extends Controller
@@ -119,14 +124,16 @@ class TripController extends Controller
         return self::getResponse(true, "Trip has been updated", $trip, 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Trip $trip): JsonResponse
     {
-        $trip->delete();
-        return self::getResponse(true, "Trip has been deleted", null, 200);
+        // Assuming there's a relationship defined in the Trip model that corresponds to the 'actives' table
+        $trip->activeRecords()->delete(); // Deletes all active records related to the trip
+
+        $trip->delete(); // Deletes the trip itself
+
+        return self::getResponse(true, "Trip and its related active records have been deleted", null, 200);
     }
+
 
     /**
      * attach stations to a trip
@@ -232,16 +239,12 @@ class TripController extends Controller
             'isOpened' => 'required|boolean',
             'start_date' => 'required',
             'price' => 'required|numeric',
-            'has_paid' => 'boolean',
-            'reserve_statue' => 'boolean'
         ]);
 
         $user_id = $request->input('user_id');
         $isOpened = $request->input('isOpened');
         $start_date = $request->input('start_date');
         $price = $request->input('price');
-        $has_paid = $request->input('has_paid');
-        $reserve_statue = $request->input('reserve_statue');
 
             if (!$user_id || !$isOpened || !$start_date || !$price) {
                 return response()->json(['error' => 'Missing required data'], 400);
@@ -253,8 +256,6 @@ class TripController extends Controller
                     'isOpened' => $isOpened,
                     'start_date' => $start_date,
                     'price' => $price,
-                    'has_paid' => $has_paid,
-                    'reserve_statue' => $reserve_statue
                 ]);
             } catch (\Exception $e) {
                 Log::error("Failed to update trip status: " . $e->getMessage());
@@ -266,23 +267,24 @@ class TripController extends Controller
 
 
 
-    public function updateUserInTrip(Request $request, $active_id): JsonResponse
+    public function updateUserInTrip(Request $request, $active_id): JsonResponse//change the guide of a trip
     {
         $pivotRecord = Active::find($active_id);
-
         if (!$pivotRecord) {
             return response()->json(['error' => 'Pivot table record not found'], 404);
         }
-
         $tripId = $pivotRecord->trip_id;
         $userId = $pivotRecord->user_id;
+        $user = User::find($userId);
+        if (!$user || $user->role != "guide") {
+            return response()->json(['error' => 'user is not a guide'], 404);
+        }
 
         // Correctly compare the user IDs
         if ($request->user_id == $userId) {
             // If the user IDs match, return a success response without updating anything
             return response()->json(['success' => 'No changes needed, user ID is already up-to-date'], 200);
         }
-
         // Proceed with the update only if the user IDs do not match
         $pivotRecord->update([
             'user_id' => $request->user_id, // Use the new user ID from the request
@@ -290,16 +292,9 @@ class TripController extends Controller
             'isOpened' => $pivotRecord->isOpened,
             'start_date' => $pivotRecord->start_date,
             'price' => $pivotRecord->price,
-            'has_paid' => $pivotRecord->has_paid,
-            'reserve_statue' => $pivotRecord->reserve_statue
         ]);
-
         return response()->json(['success' => 'Pivot table record updated successfully'], 200);
     }
-
-
-
-
 
 
     /**
@@ -349,61 +344,71 @@ class TripController extends Controller
      * Handle payment using cash.
      *
      * @param Request $request The incoming HTTP request.
-     * @param int $active_id The ID of the active record to find.
      * @return JsonResponse The JSON response.
      */
-    public function payInPerson(Request $request, $active_id): JsonResponse
+    /**
+     * Handle payment using cash.
+     *
+     * @param Request $request The incoming HTTP request.
+     * @return JsonResponse The JSON response.
+     * @throws ValidationException
+     */
+    public function payInPerson(Request $request, $reservation_id): JsonResponse
     {
-        $pivotRecord = Active::find($active_id);
-
-        if (!$pivotRecord) {
-            return response()->json(['error' => 'Pivot table record not found'], 404);
-        }
-
-        $currentUserId = $pivotRecord->user_id;
-        $requestedHasPaid = $request->input('has_paid', false); // Default to false if not present
-
-        // Check if the user ID needs to be updated and if the has_paid status matches
-        if ($currentUserId != $request->user_id || $requestedHasPaid != $pivotRecord->has_paid) {
-            // Update the pivot record with new values
-            $pivotRecord->update([
-                'user_id' => $request->user_id, // Update the user ID from the request
-                'trip_id' => $pivotRecord->trip_id,
-                'isOpened' => $pivotRecord->isOpened,
-                'start_date' => $pivotRecord->start_date,
-                'price' => $pivotRecord->price,
-                'has_paid' => $requestedHasPaid,
-                'reserve_statue' => $pivotRecord->reserve_statue
-            ]);
-            return response()->json(['success' => 'Payment processed successfully using cash'], 200);
-        } else {
-            return response()->json(['message' => 'Payment statue is not updated.. check your information and try again'], 200);
-        }
-    }
-
-    public function unreservedTrip(Request $request, $active_id): JsonResponse
-    {
-        $pivotRecord = Active::find($active_id);
-
-        if (!$pivotRecord) {
-            return response()->json(['error' => 'Pivot table record not found'], 404);
-        }
-
-        $userId = $pivotRecord->user_id;
-        //$reserveStatueKey = $pivotRecord->reserve_statue; // Assuming this is the column name
-
-        // Check if the user has reserved the trip and if the user IDs match
-        if ($request->reserve_statue === false && $userId == $request->user_id) {
-            // If the user hasn't reserved the trip, return a success response without updating anything
-            return response()->json(['success' => 'You have not reserved in the trip'], 200);
-        }
-
-        // Proceed with the update only if the user IDs match and the reservation status needs to be toggled
-        $pivotRecord->update([
-            'reserve_statue'=> $pivotRecord->reserve_statue
+        // Validate the incoming request
+        $validatedData = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'has_paid' => 'boolean',
         ]);
 
-        return response()->json(['success' => 'Pivot table record updated successfully'], 200);
+        // Retrieve the reservation using a relationship method if available
+        $reservation = Reservation::where('id', $reservation_id)->firstOrFail();
+
+        // Extract the requested has_paid status
+        $requestedHasPaid = $validatedData['has_paid'];
+
+        // Check if the user ID needs to be updated and if the has_paid status matches
+        if ($reservation->user_id == $validatedData['user_id'] && !$reservation->has_paid) {
+            // Update the reservation record with new values
+            $reservation->update([
+                'user_id' => $validatedData['user_id'],
+                'active_id' => $reservation->active_id,
+                'reserve_status' => true, // Corrected typo from 'reserve_statue' to 'reserve_status'
+                'has_paid' => $requestedHasPaid
+            ]);
+
+            return response()->json(['success' => 'Payment processed successfully using cash'], 200);
+        } else {
+            throw ValidationException::withMessages([
+                'user_id' => ['The provided user ID does not match the reservation or the payment status is incorrect. Please check your information and try again.']
+            ]);
+        }}
+
+    /**
+     *
+     */
+    public function allTripForGuide(User $user): \Illuminate\Http\JsonResponse
+    {
+        // Retrieve the trips for the guide, filtering by isOpened=true and ordering by start_date ascending
+        $tripsForGuide = $user->trips()->wherePivot('isOpened', true)
+            ->orderByPivot('start_date')
+            ->get();
+
+        return response()->json([
+            'status' => true,
+            'data' => $tripsForGuide,
+        ], 200);
+    }
+
+    public function allTripsForUser(User $user): \Illuminate\Http\JsonResponse
+    {
+        // Retrieve all trips for the user
+        $tripsForUser = $user->trips;
+
+        return response()->json([
+            'status' => true,
+            'data' => $tripsForUser,
+        ], 200);
     }
 
 

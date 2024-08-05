@@ -14,6 +14,7 @@ class CommentController extends Controller
     public function __construct()
     {
         $this->middleware('auth:api');
+
     }
 
     /**
@@ -23,6 +24,7 @@ class CommentController extends Controller
      */
     public function index(): JsonResponse
     {
+
         $comments = Comment::all();
         if (is_null($comments))
             return self::getResponse(false, "No data available", null, 204);

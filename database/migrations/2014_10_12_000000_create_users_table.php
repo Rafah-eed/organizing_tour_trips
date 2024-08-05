@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-
-    /*
-     * TODO :
-     * MAKE A FUNCTION TO COUNT THE NUMBER OF TRIPS THE USER HAS GONE IN THE USER CONTROLLER
-     */
     /**
      * Run the migrations.
      */

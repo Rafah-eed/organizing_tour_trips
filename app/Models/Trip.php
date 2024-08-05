@@ -28,11 +28,6 @@ class Trip extends Model
         return $this->hasMany(Comment::class);
     }
 
-    public function actives(): HasMany
-    {
-        return $this->hasMany(Active::class);
-    }
-
     // Assuming the pivot table is named 'trip_station' and it uses 'trip_id' and 'station_id'
     public function stations(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
@@ -43,6 +38,11 @@ class Trip extends Model
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class , 'actives')
-            ->withPivot('isOpened','start_date','price','has_paid','reserve_statue');
+            ->withPivot('isOpened','start_date','price');
+    }
+
+    public function activeRecords(): HasMany
+    {
+        return $this->hasMany(Active::class);
     }
 }
