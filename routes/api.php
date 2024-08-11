@@ -40,7 +40,6 @@ Route::get('/allTripsForUser/{user}', [TripController::class,'allTripsForUser'])
 Route::get('/trip/{trip}/stations', [TripController::class, 'allStationsForTrip']);
 Route::post('/trip/search', [TripController::class, 'search']);
 Route::post('/trip/filter', [TripController::class, 'filter']);
-Route::post('/trip/payInPerson/{active_id}', [TripController::class, 'payInPerson']);
 Route::post('/user/payWithBank', [UserController::class, 'payWithBank']);
 
 
@@ -69,6 +68,8 @@ Route::middleware('checkAdminRole')->group(function () {
     Route::apiResource('stationTrip', StationTripController::class);
     Route::post('/trip/{trip}/stations', [TripController::class, 'attachStationToTrip']);
     Route::post('/trip/{trip_id}/activate', [TripController::class, 'activate']);
+    Route::post('/trip/payInPerson/{active_id}', [TripController::class, 'payInPerson']);
+
 
     Route::get('/trip/allUsersForTrip/{trip}', [TripController::class, 'allUsersForTrip']);
 });
