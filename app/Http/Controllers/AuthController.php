@@ -73,7 +73,7 @@ class AuthController extends Controller
         ]);
 
 
-        $token = Auth::attempt($user);
+        $token = Auth::attempt($request->only('email', 'password'));
 
         return response()->json([
             'status' => 'success',
