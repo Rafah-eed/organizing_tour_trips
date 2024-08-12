@@ -51,7 +51,7 @@ Route::controller(AuthController::class)->group(function () {
 
 });
 
-Route::middleware('checkAdminRole')->group(function () {
+Route::middleware('CheckAdminRole')->group(function () {
 
     Route::put('/trip/{trip}', [TripController::class, 'update']);
     Route::post('/trip', [TripController::class, 'store']);
@@ -74,7 +74,7 @@ Route::middleware('checkAdminRole')->group(function () {
     Route::get('/trip/allUsersForTrip/{trip}', [TripController::class, 'allUsersForTrip']);
 });
 
-Route::middleware('checkGuideRole')->group(function () {
+Route::middleware('CheckGuideRole')->group(function () {
     Route::get('/trip/allTripForGuide/{guide_id}', [TripController::class, 'allTripForGuide']);
 
 });
