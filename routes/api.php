@@ -76,5 +76,4 @@ Route::middleware('CheckAdminRole')->group(function () {
 
 Route::middleware('CheckGuideRole')->group(function () {
     Route::get('/trip/allTripForGuide/{guide_id}', [TripController::class, 'allTripForGuide']);
-
 });
