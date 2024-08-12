@@ -22,7 +22,8 @@ return new class extends Migration
             $table->string('password');
             $table->string('bankName');
             $table->string('accountNumber');
-            $table->enum('role', ['admin', 'guide', 'user']); // 1 for admin and 2 for guide and 3 for user
+            $table->string('role',255);
+            //$table->enum('role', ['admin', 'guide', 'user']); // 1 for admin and 2 for guide and 3 for user
             $table->rememberToken();
             $table->timestamps();
         });
@@ -38,7 +39,7 @@ return new class extends Migration
 
     public function getRememberToken()
     {
-        return $this->remember_token;
+        return $this->remember_token= null;
     }
 
     public function setRememberToken($value)
@@ -46,7 +47,7 @@ return new class extends Migration
         $this->remember_token = $value;
     }
 
-    public function getRememberTokenName()
+    public function getRememberTokenName(): string
     {
         return 'remember_token';
     }

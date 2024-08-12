@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -55,7 +56,7 @@ class AuthController extends Controller
             'password' => 'required|string|min:6',
             'bankName' => 'required|string|max:255',
             'accountNumber' => 'required|numeric',
-            'role' => 'in:admin,guide,user'
+            'role' => 'required|string|max:255'
         ]);
 
 
@@ -72,7 +73,7 @@ class AuthController extends Controller
             'role' => $request->role
         ]);
 
-        $token = Auth::login($user);
+        $token = Str::random(32);
 
         return response()->json([
             'status' => 'success',
