@@ -26,14 +26,12 @@ class CheckGuideRole
         // Retrieve the authenticated user
         $user = Auth::user();
 
-        // Use the isAdmin method to check if the user is an admin
+
         if ($user->isGuide()) {
-            // The user is an admin, proceed with the request
             return $next($request);
         }
 
-        // The user is not an admin, return an unauthorized response
-        return response()->json(['error' => 'Unauthorized'], 403);
+        return response()->json(['error' => 'Unauthorized 403'], 403);
     }
 
 
