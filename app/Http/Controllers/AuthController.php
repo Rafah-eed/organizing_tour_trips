@@ -5,18 +5,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Token;
 use App\Models\User;
-use Illuminate\Support\Str;
+
 
 class AuthController extends Controller
 {
-    public function __construct()
+        public function __construct()
     {
         $this->middleware('auth:api', ['except' => ['login','register']]);
     }
 
-    public function login(Request $request): \Illuminate\Http\JsonResponse
+        public function login(Request $request)
     {
         $request->validate([
             'email' => 'required|string|email',
@@ -34,13 +34,13 @@ class AuthController extends Controller
 
         $user = Auth::user();
         return response()->json([
-                'status' => 'success',
-                'user' => $user,
-                'authorization' => [
-                    'token' => $token,
-                    'type' => 'bearer',
-                ]
-            ]);
+            'status' => 'success',
+            'user' => $user,
+            'authorisation' => [
+                'token' => $token,
+                'type' => 'bearer',
+            ]
+        ]);
 
     }
 
@@ -73,20 +73,24 @@ class AuthController extends Controller
             'role' => $request->role
         ]);
 
-        $token = Str::random(32);
+// Perform the login
+        Auth::login($user);
 
+// Retrieve the token
+        $token = Token::retrieve(Auth::id());
+        //$token = Auth::login($user);
         return response()->json([
             'status' => 'success',
             'message' => 'User created successfully',
             'user' => $user,
-            'authorization' => [
+            'authorisation' => [
                 'token' => $token,
                 'type' => 'bearer',
             ]
         ]);
     }
 
-    public function logout()
+        public function logout()
     {
         Auth::logout();
         return response()->json([
@@ -95,16 +99,17 @@ class AuthController extends Controller
         ]);
     }
 
-    public function refresh()
+        public function refresh()
     {
         return response()->json([
             'status' => 'success',
             'user' => Auth::user(),
-            'authorization' => [
+            'authorisation' => [
                 'token' => Auth::refresh(),
                 'type' => 'bearer',
             ]
         ]);
     }
+
 
 }

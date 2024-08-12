@@ -78,7 +78,7 @@ class UserController extends Controller
             'password' => 'required|min:6',
             'bankName' => 'required|string|max:255',
             'accountNumber' => 'required|numeric',
-            'role' => 'required'
+            'role' => 'required|string|max:255'
         ]);
 
         try {

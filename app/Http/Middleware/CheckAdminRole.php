@@ -19,22 +19,19 @@ class CheckAdminRole
     {
         // Check if a user is authenticated
         if (!Auth::check()) {
-            // No user is logged in, return an unauthorized response
-            return response()->json(['error' => 'Unauthorized'], 403);
+            // No user is logged in, return an unauthorized response with a specific message
+            return response()->json(['error' => 'Not authenticated'], 403);
         }
 
         // Retrieve the authenticated user
         $user = Auth::user();
 
-        // Use the isAdmin method to check if the user is an admin
         if ($user->isAdmin()) {
             // The user is an admin, proceed with the request
             return $next($request);
         }
 
-        // The user is not an admin, return an unauthorized response
-        return response()->json(['error' => 'Unauthorized'], 403);
+        // The user is not an admin, return an unauthorized response with a specific message
+        return response()->json(['error' => 'Not authorized as an admin'], 403);
     }
-
-
 }
